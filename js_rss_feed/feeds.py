@@ -6,7 +6,12 @@ from django.utils import feedgenerator
 from aldryn_apphooks_config.utils import get_app_instance
 from aldryn_newsblog.models import Article
 from js_events.models import Event
-from js_vacancies.models import Vacancy
+try:
+    from js_vacancies.models import Vacancy
+    THERE_IS_VACANCY = True
+except:
+    THERE_IS_VACANCY = False
+
 
 
 class RSSFeed(Feed):
@@ -25,9 +30,9 @@ class RSSFeed(Feed):
         return self.config.safe_translation_getter('description')
 
     def items(self):
-        if self.config.model == 'vacancy':
+        if THERE_IS_VACANCY and self.config.model == 'vacancy':
             self.model = Vacancy
-        if self.config.model == 'event':
+        elif self.config.model == 'event':
             self.model = Event
         else:
             self.model = Article

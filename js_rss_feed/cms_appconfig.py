@@ -11,6 +11,11 @@ from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from parler.models import TranslatableModel, TranslatedFields
+try:
+    from js_vacancies.models import Vacancy
+    THERE_IS_VACANCY = True
+except:
+    THERE_IS_VACANCY = False
 
 
 FEED_TYPES = (
@@ -21,8 +26,12 @@ FEED_TYPES = (
 MODELS = (
     ('article', 'Article'),
     ('event', 'Event'),
-    ('vacancy', 'Vacancy'),
 )
+if THERE_IS_VACANCY:
+    MODELS += (
+        ('vacancy', 'Vacancy'),
+    )
+
 
 @python_2_unicode_compatible
 class RSSFeedConfig(TranslatableModel, AppHookConfig):
